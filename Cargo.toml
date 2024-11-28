@@ -1,0 +1,9 @@
+[package]
+name = "whitakers-parser"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.93"
+pest = "2.7.14"
+pest_derive = "2.7.14"

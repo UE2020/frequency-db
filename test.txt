@@ -1,0 +1,17 @@
+que                  TACKON
+-que = and (enclitic, translated before attached word); completes plerus/uter;
+utr.um               N      3 3 GEN P M
+uter, utris  N (3rd) M   [XXXDS]    lesser
+utr.um               N      3 4 GEN P N
+uter, utris  N (3rd) N   [XXXDS]    lesser
+skin; wine/water skin; bag/bottle made of skin/hide; (inflated for flotation);
+utr.um               ADJ    1 4 NOM S N POS
+utr.um               ADJ    1 4 VOC S N POS
+utr.um               ADJ    1 4 ACC S M POS
+utr.um               ADJ    1 4 ACC S N POS
+uter, utra, utrum  ADJ   [XXXAO]
+which (of two), whichever, no matter which; one, either, one or other;
+(w/que) each/either (of two); both (separately); each side (pl.), each set;
+utrum                ADV    POS
+utrum  ADV   [XXXBO]
+whether; (introducing an indirect question); [utrum...an => whether...or];

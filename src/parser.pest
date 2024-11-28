@@ -1,0 +1,39 @@
+WHITESPACE = _{ " " | "\t" }
+word = @{ (!(" ") ~ ANY)+ }
+breakdown = @{ (ASCII_ALPHA | ".")+ }
+part_of_speech = { "PRON" | "SUPINE" | "N" | "ADJ" | "ADV" | "V" | "CONJ" | "PREP" }
+case = { "X" | "NOM" | "ACC" | "DAT" | "GEN" | "ABL" | "LOC" | "VOC" | "X" }
+number = { "P" | "S" | "X" }
+gender = { "M" | "F" | "N" | "C" | "X" }
+degree = { "POS" | "SUPER" | "COMP" }
+tense = { "PERF" | "PRES" | "IMPERF" | "PLUP" | "FUT" | "FUTP" }
+voice = { "ACTIVE" | "PASSIVE" }
+mood = { "IND" | "SUB" | "IMP" | "PPL" }
+verb_kind = { "VERB" | "VPAR" }
+time = { "Early" | "Late" }
+
+entry = { word_combination | word_mod | prefix | suffix | tackon | special_ending | possibility | participle_possibility | verb_possibility | possible_lemma | syncope | definition | junk }
+
+combined_word = @{ (!("+" | ")" | " ") ~ ANY)+ }
+word_combination = { "Two words" ~ NEWLINE ~ "May be 2 words combined (" ~ combined_word ~ "+" ~ combined_word ~ (!(NEWLINE) ~ ANY)+ }
+
+tackon = { word ~ "TACKON" }
+suffix = { word ~ "SUFFIX" }
+word_mod = { "Word mod" ~ word ~ NEWLINE ~ (!("\n") ~ ANY)* }
+prefix = { word ~ "PREFIX" ~ NEWLINE ~ (!("\n") ~ ANY)* }
+special_ending = { "-" ~ word ~ (!("\n") ~ ANY)* }
+possibility = { breakdown ~ part_of_speech ~ ASCII_DIGIT ~ ASCII_DIGIT ~ case ~ number ~ gender ~ degree? ~ time? ~ (!("\n") ~ ANY)* }
+verb_possibility = { breakdown ~ "V" ~ ASCII_DIGIT ~ ASCII_DIGIT ~ tense ~ voice ~ mood ~ ASCII_DIGIT ~ number ~ (!("\n") ~ ANY)* }
+participle_possibility = { breakdown ~ "VPAR" ~ ASCII_DIGIT ~ ASCII_DIGIT ~ case ~ number ~ gender ~ tense ~ voice ~ mood ~	 (!("\n") ~ ANY)* }
+
+possible_lemma = { form_list ~ part_of_speech ~ degree? ~ case? ~ (!("\n") ~ ANY)*  }
+
+form = @{ (!("  " | "," | "\n" | ";") ~ ANY)+ }
+form_list = { form ~ ("," ~ form)* }
+
+syncope = { "Syncope" ~ word ~ "=>" ~ word ~ NEWLINE ~ (!("\n") ~ ANY)* }
+definition = { !("[" | "*") ~ (!("\n") ~ ANY)* }
+
+junk = { (!("\n") ~ ANY)* }
+
+file = _{ SOI ~ (entry ~ NEWLINE)* ~ EOI }
