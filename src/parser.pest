@@ -1,7 +1,7 @@
 WHITESPACE = _{ " " | "\t" }
 word = @{ (!(" ") ~ ANY)+ }
 breakdown = @{ (ASCII_ALPHA | ".")+ }
-part_of_speech = { "PRON" | "SUPINE" | "N" | "ADJ" | "ADV" | "V" | "CONJ" | "PREP" }
+part_of_speech = { "X" | "PRON" | "INTERJ" | "SUPINE" | "N" | "ADJ" | "ADV" | "V" | "CONJ" | "PREP" }
 case = { "X" | "NOM" | "ACC" | "DAT" | "GEN" | "ABL" | "LOC" | "VOC" | "X" }
 number = { "P" | "S" | "X" }
 gender = { "M" | "F" | "N" | "C" | "X" }
@@ -28,17 +28,9 @@ participle_possibility = { breakdown ~ "VPAR" ~ ASCII_DIGIT ~ ASCII_DIGIT ~ case
 adverb_possibility = { breakdown ~ "ADV" ~ degree ~ (!("\n") ~ ANY)* }
 
 possible_lemma = { form_list ~ part_of_speech ~ degree? ~ case? ~ (!("\n") ~ ANY)*  }
-possible_noun_lemma = { form_list ~ "N" ~ (!("\n") ~ ANY)*  }
-possible_pronoun_lemma = { form_list ~ "PRON" ~ (!("\n") ~ ANY)*  }
-possible_adj_lemma = { form_list ~ "ADJ" ~ (!("\n") ~ ANY)* }
-possible_adv_lemma = { form_list ~ "ADV" ~ degree? ~ (!("\n") ~ ANY)* }
-possible_prep_lemma = { word ~ "PREP" ~ case ~ (!("\n") ~ ANY)* }
 
-form = @{ (!("  " | "." | "," | "\n" | ";") ~ ANY)+ }
+form = @{ (!("  " | "," | "\n" | ";") ~ ANY)+ }
 form_list = { form ~ ("," ~ form)* }
-
-possible_conj_lemma = { word ~ "CONJ" ~ (!("\n") ~ ANY)* }
-possible_verb_lemma = { form_list ~ "V" ~ (!("\n") ~ ANY)* }
 
 syncope = { "Syncope" ~ word ~ "=>" ~ word ~ NEWLINE ~ (!("\n") ~ ANY)* }
 definition = { !("[" | "*") ~ (!("\n") ~ ANY)* }
