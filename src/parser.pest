@@ -1,7 +1,7 @@
 WHITESPACE = _{ " " | "\t" }
 word = @{ (!(" ") ~ ANY)+ }
 breakdown = @{ (ASCII_ALPHA | ".")+ }
-part_of_speech = { "X" | "PRON" | "INTERJ" | "SUPINE" | "N" | "ADJ" | "ADV" | "V" | "CONJ" | "PREP" }
+part_of_speech = { "NUM" | "X" | "PRON" | "INTERJ" | "SUPINE" | "N" | "ADJ" | "ADV" | "V" | "CONJ" | "PREP" }
 case = { "X" | "NOM" | "ACC" | "DAT" | "GEN" | "ABL" | "LOC" | "VOC" | "X" }
 number = { "P" | "S" | "X" }
 gender = { "M" | "F" | "N" | "C" | "X" }
