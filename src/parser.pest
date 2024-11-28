@@ -6,9 +6,9 @@ case = { "X" | "NOM" | "ACC" | "DAT" | "GEN" | "ABL" | "LOC" | "VOC" | "X" }
 number = { "P" | "S" | "X" }
 gender = { "M" | "F" | "N" | "C" | "X" }
 degree = { "POS" | "SUPER" | "COMP" }
-tense = { "PERF" | "PRES" | "IMPERF" | "PLUP" | "FUT" | "FUTP" }
+tense = { "PERF" | "PRES" | "IMPF" | "PLUP" | "FUTP" | "FUT" }
 voice = { "ACTIVE" | "PASSIVE" }
-mood = { "IND" | "SUB" | "IMP" | "PPL" }
+mood = { "IND" | "SUB" | "IMP" | "PPL" | "INF" }
 verb_kind = { "VERB" | "VPAR" }
 time = { "Early" | "Late" }
 
@@ -23,8 +23,8 @@ word_mod = { "Word mod" ~ word ~ NEWLINE ~ (!("\n") ~ ANY)* }
 prefix = { word ~ "PREFIX" ~ NEWLINE ~ (!("\n") ~ ANY)* }
 special_ending = { "-" ~ word ~ (!("\n") ~ ANY)* }
 noun_or_adjective_possibility = { breakdown ~ part_of_speech ~ ASCII_DIGIT ~ ASCII_DIGIT ~ case ~ number ~ gender ~ degree? ~ time? ~ (!("\n") ~ ANY)* }
-verb_possibility = { breakdown ~ "V" ~ ASCII_DIGIT ~ ASCII_DIGIT ~ tense ~ voice ~ mood ~ ASCII_DIGIT ~ number ~ (!("\n") ~ ANY)* }
-participle_possibility = { breakdown ~ "VPAR" ~ ASCII_DIGIT ~ ASCII_DIGIT ~ case ~ number ~ gender ~ tense ~ voice ~ mood ~	 (!("\n") ~ ANY)* }
+verb_possibility = { breakdown ~ "V" ~ ASCII_DIGIT ~ ASCII_DIGIT ~ tense ~ voice? ~ mood ~ ASCII_DIGIT ~ number ~ (!("\n") ~ ANY)* }
+participle_possibility = { breakdown ~ "VPAR" ~ ASCII_DIGIT ~ ASCII_DIGIT ~ case ~ number ~ gender ~ tense ~ voice? ~ mood ~	 (!("\n") ~ ANY)* }
 adverb_possibility = { breakdown ~ "ADV" ~ degree ~ (!("\n") ~ ANY)* }
 
 possible_lemma = { form_list ~ part_of_speech ~ degree? ~ case? ~ (!("\n") ~ ANY)*  }

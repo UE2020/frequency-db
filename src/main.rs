@@ -1,12 +1,13 @@
 use anyhow::Context;
 use pest::Parser;
 use pest_derive::Parser;
-use std::collections::HashMap;
-use std::fs;
-use std::io::{BufRead, BufReader};
-use std::io::Write;
-use std::process::{Child, ChildStdout, Command, Stdio};
-use std::sync::Mutex;
+use std::{
+    collections::HashMap,
+    fs,
+    io::{BufRead, BufReader, Write},
+    process::{Child, ChildStdout, Command, Stdio},
+    sync::Mutex,
+};
 
 #[derive(Parser)]
 #[grammar = "parser.pest"]
@@ -96,8 +97,7 @@ impl Drop for WhitakerProcess {
 }
 
 fn main() -> anyhow::Result<()> {
-    let word_mod_content =
-        "TRIM_OUTPUT                       Y\n\
+    let word_mod_content = "TRIM_OUTPUT                       Y\n\
         HAVE_OUTPUT_FILE                  N\n\
         WRITE_OUTPUT_TO_FILE              N\n\
         DO_UNKNOWNS_ONLY                  N\n\
@@ -116,8 +116,7 @@ fn main() -> anyhow::Result<()> {
 
     fs::write("../whitakers-words/WORD.MOD", word_mod_content)?;
 
-    let word_mdv_content =
-        "HAVE_STATISTICS_FILE              N\n\
+    let word_mdv_content = "HAVE_STATISTICS_FILE              N\n\
         WRITE_STATISTICS_FILE             N\n\
         SHOW_DICTIONARY                   N\n\
         SHOW_DICTIONARY_LINE              N\n\
