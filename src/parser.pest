@@ -12,7 +12,7 @@ mood = { "IND" | "SUB" | "IMP" | "PPL" }
 verb_kind = { "VERB" | "VPAR" }
 time = { "Early" | "Late" }
 
-entry = { word_combination | word_mod | prefix | suffix | tackon | special_ending | possibility | participle_possibility | verb_possibility | possible_lemma | syncope | definition | junk }
+entry = { word_combination | word_mod | prefix | suffix | tackon | special_ending | noun_or_adjective_possibility | adverb_possibility | participle_possibility | verb_possibility | possible_lemma | syncope | definition | junk }
 
 combined_word = @{ (!("+" | ")" | " ") ~ ANY)+ }
 word_combination = { "Two words" ~ NEWLINE ~ "May be 2 words combined (" ~ combined_word ~ "+" ~ combined_word ~ (!(NEWLINE) ~ ANY)+ }
@@ -22,18 +22,27 @@ suffix = { word ~ "SUFFIX" }
 word_mod = { "Word mod" ~ word ~ NEWLINE ~ (!("\n") ~ ANY)* }
 prefix = { word ~ "PREFIX" ~ NEWLINE ~ (!("\n") ~ ANY)* }
 special_ending = { "-" ~ word ~ (!("\n") ~ ANY)* }
-possibility = { breakdown ~ part_of_speech ~ ASCII_DIGIT ~ ASCII_DIGIT ~ case ~ number ~ gender ~ degree? ~ time? ~ (!("\n") ~ ANY)* }
+noun_or_adjective_possibility = { breakdown ~ part_of_speech ~ ASCII_DIGIT ~ ASCII_DIGIT ~ case ~ number ~ gender ~ degree? ~ time? ~ (!("\n") ~ ANY)* }
 verb_possibility = { breakdown ~ "V" ~ ASCII_DIGIT ~ ASCII_DIGIT ~ tense ~ voice ~ mood ~ ASCII_DIGIT ~ number ~ (!("\n") ~ ANY)* }
 participle_possibility = { breakdown ~ "VPAR" ~ ASCII_DIGIT ~ ASCII_DIGIT ~ case ~ number ~ gender ~ tense ~ voice ~ mood ~	 (!("\n") ~ ANY)* }
+adverb_possibility = { breakdown ~ "ADV" ~ degree ~ (!("\n") ~ ANY)* }
 
 possible_lemma = { form_list ~ part_of_speech ~ degree? ~ case? ~ (!("\n") ~ ANY)*  }
+possible_noun_lemma = { form_list ~ "N" ~ (!("\n") ~ ANY)*  }
+possible_pronoun_lemma = { form_list ~ "PRON" ~ (!("\n") ~ ANY)*  }
+possible_adj_lemma = { form_list ~ "ADJ" ~ (!("\n") ~ ANY)* }
+possible_adv_lemma = { form_list ~ "ADV" ~ degree? ~ (!("\n") ~ ANY)* }
+possible_prep_lemma = { word ~ "PREP" ~ case ~ (!("\n") ~ ANY)* }
 
-form = @{ (!("  " | "," | "\n" | ";") ~ ANY)+ }
+form = @{ (!("  " | "." | "," | "\n" | ";") ~ ANY)+ }
 form_list = { form ~ ("," ~ form)* }
+
+possible_conj_lemma = { word ~ "CONJ" ~ (!("\n") ~ ANY)* }
+possible_verb_lemma = { form_list ~ "V" ~ (!("\n") ~ ANY)* }
 
 syncope = { "Syncope" ~ word ~ "=>" ~ word ~ NEWLINE ~ (!("\n") ~ ANY)* }
 definition = { !("[" | "*") ~ (!("\n") ~ ANY)* }
 
 junk = { (!("\n") ~ ANY)* }
 
-file = _{ SOI ~ (entry ~ NEWLINE)* ~ EOI }
+file = _{ SOI ~ (entry ~ NEWLINE+)* ~ EOI }
