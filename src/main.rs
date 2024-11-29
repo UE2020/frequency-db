@@ -9,6 +9,8 @@ use std::{
     sync::Mutex,
 };
 
+use plotters::prelude::*;
+
 #[derive(Parser)]
 #[grammar = "parser.pest"]
 pub struct WhitakerParser;
@@ -203,8 +205,6 @@ fn main() -> anyhow::Result<()> {
         .map(|(rank, (_, &freq))| ((rank + 1) as f64, freq as f64))
         .collect();
 
-    use plotters::prelude::*;
-
     // Create a drawing area
     let root = BitMapBackend::new("rank_frequency_plot.png", (800, 600)).into_drawing_area();
     root.fill(&WHITE)?;
@@ -218,7 +218,7 @@ fn main() -> anyhow::Result<()> {
         .y_label_area_size(40)
         .build_cartesian_2d(
             (1f64..(rank_frequency.len() as f64)).log_scale(), // Logarithmic x-axis
-            (1f64..max_frequency).log_scale(),                // Logarithmic y-axis
+            (1f64..max_frequency).log_scale(),                 // Logarithmic y-axis
         )?;
 
     chart.configure_mesh()

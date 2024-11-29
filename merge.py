@@ -1,31 +1,33 @@
 import os
-import re
 
-def merge_files_without_tags(input_folder, output_file):
-    # Ensure the output file doesn't exist before starting
-    if os.path.exists(output_file):
-        os.remove(output_file)
+def combine_text_files(input_folder, output_file, separator="--- File Separator ---\n"):
+    """
+    Combines all text files in the input_folder into one file.
 
-    # Open the output file in write mode
+    Args:
+        input_folder (str): Path to the folder containing text files.
+        output_file (str): Path to the output file.
+        separator (str): A string to separate the contents of each file.
+    """
+    # Get all text files in the folder
+    text_files = [f for f in os.listdir(input_folder) if f.endswith(".txt")]
+    text_files.sort()  # Sort files alphabetically
+    
     with open(output_file, "w", encoding="utf-8") as outfile:
-        # Iterate through all files in the input folder
-        for filename in sorted(os.listdir(input_folder)):
-            file_path = os.path.join(input_folder, filename)
-            if os.path.isfile(file_path):  # Check if it's a file
+        for file_name in text_files:
+            file_path = os.path.join(input_folder, file_name)
+            
+            try:
                 with open(file_path, "r", encoding="utf-8") as infile:
-                    for line in infile:
-                        # Remove any text enclosed in angle brackets, including the brackets
-                        cleaned_line = re.sub(r"<[^>]+>", "", line)
-                        # Write the cleaned line to the output file
-                        outfile.write(cleaned_line)
+                    outfile.write(f"--- {file_name} ---\n")  # Add filename as a header
+                    outfile.write(infile.read())
+                    outfile.write(f"\n{separator}\n")
+                    
+            except Exception as e:
+                print(f"Could not process file {file_name}: {e}")
 
-    print(f"Merged files into {output_file} without tags.")
-
-# Folder containing the files
-input_folder = "../lat_text_tesserae/texts"
-
-# Output file
+# Usage
+input_folder = "../lat_text_latin_library"
 output_file = "gigafile.txt"
 
-# Run the merging process
-merge_files_without_tags(input_folder, output_file)
+combine_text_files(input_folder, output_file)
