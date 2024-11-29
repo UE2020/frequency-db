@@ -150,7 +150,7 @@ fn main() -> anyhow::Result<()> {
 
     fs::write("../whitakers-words/WORD.MDV", word_mdv_content)?;
 
-    let filename = "latin_text.txt";
+    let filename = "gigafile.txt";
     let content = fs::read_to_string(filename)
         .with_context(|| format!("Failed to read file: {}", filename))?;
 
@@ -165,6 +165,9 @@ fn main() -> anyhow::Result<()> {
 
     let frequency_map: Mutex<HashMap<String, usize>> = Mutex::new(HashMap::new());
     dbg!(words.len());
+    // for word in words {
+    //     *frequency_map.lock().unwrap().entry(word).or_insert(0) += 1;
+    // }
     std::thread::scope(|s| {
         for words in words.chunks(words.len() / 32) {
             let words = words.to_vec();
@@ -190,9 +193,47 @@ fn main() -> anyhow::Result<()> {
     let mut frequency_list: Vec<(&String, &usize)> = frequency_map.iter().collect();
     frequency_list.sort_by(|a, b| b.1.cmp(a.1));
 
-    for (base, count) in frequency_list {
-        println!("{}\t{}", base, count);
-    }
+    // for (base, count) in frequency_list {
+    //     println!("{}\t{}", base, count);
+    // }
+
+    let rank_frequency: Vec<(f64, f64)> = frequency_list
+        .iter()
+        .enumerate()
+        .map(|(rank, (_, &freq))| ((rank + 1) as f64, freq as f64))
+        .collect();
+
+    use plotters::prelude::*;
+
+    // Create a drawing area
+    let root = BitMapBackend::new("rank_frequency_plot.png", (800, 600)).into_drawing_area();
+    root.fill(&WHITE)?;
+
+    let max_frequency = rank_frequency.iter().map(|&(_, freq)| freq).fold(0.0, f64::max);
+
+    let mut chart = ChartBuilder::on(&root)
+        .caption("Word Rank vs Frequency", ("sans-serif", 20))
+        .margin(20)
+        .x_label_area_size(30)
+        .y_label_area_size(40)
+        .build_cartesian_2d(
+            (1f64..(rank_frequency.len() as f64)).log_scale(), // Logarithmic x-axis
+            (1f64..max_frequency).log_scale(),                // Logarithmic y-axis
+        )?;
+
+    chart.configure_mesh()
+        .x_desc("Rank (log scale)")
+        .y_desc("Frequency (log scale)")
+        .draw()?;
+
+    // Plot the data
+    chart.draw_series(
+        rank_frequency.iter().map(|&(rank, freq)| {
+            Circle::new((rank, freq), 3, &BLUE)
+        }),
+    )?;
+
+    root.present()?;
 
     Ok(())
 }
